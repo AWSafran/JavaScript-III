@@ -147,5 +147,38 @@ Humanoid.prototype.greet = function(){
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
+
+  function Hero(obj){
+    this.kingdom = obj.kingdom;
+  }
+  Hero.prototype = Object.create(Humanoid.prototype);
+
+function Villain(obj){
+  this.realm = obj.realm;
+}
+
+Villain.prototype = Object.create(Humanoid.prototype);
+
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
+  Hero.prototype.attack = function(enemy){
+    console.log(`${this.name} attacked ${enemy.name} with ${this.weapon}`);
+    enemy.takeDamage();
+    --enemy.healthPoints;
+    if (enemy.healthPoints < 1){
+      enemy.destroy();
+    }
+  }
+
+  Villain.prototype.attack = function(enemy){
+    console.log(`${this.name} landed a critical hit on ${enemy.name} with ${this.weapon} and dealt 3 damage!`);
+    enemy.takeDamage();
+    enemy.hitpoints -= 3;
+    if (enemy.healthPoints < 1){
+      enemy.destroy();
+    }
+  }
+
+  
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+  
