@@ -150,35 +150,77 @@ Humanoid.prototype.greet = function(){
 
   function Hero(obj){
     this.kingdom = obj.kingdom;
+    Humanoid.call(this,obj);
   }
-  Hero.prototype = Object.create(Humanoid.prototype);
+Hero.prototype = Object.create(Humanoid.prototype);
 
 function Villain(obj){
   this.realm = obj.realm;
+  Humanoid.call(this,obj)
 }
 
 Villain.prototype = Object.create(Humanoid.prototype);
 
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   Hero.prototype.attack = function(enemy){
-    console.log(`${this.name} attacked ${enemy.name} with ${this.weapon}`);
+    const dmg = Math.floor(Math.random() * 6);
+    console.log(`${this.name} attacked ${enemy.name} with ${this.weapons} and dealt ${dmg}`);
     enemy.takeDamage();
-    --enemy.healthPoints;
+    enemy.healthPoints -= dmg;
     if (enemy.healthPoints < 1){
-      enemy.destroy();
+      return;
     }
+    console.log(`${enemy.name} has ${enemy.healthPoints} health points remaining!`);
+    return;
   }
 
   Villain.prototype.attack = function(enemy){
-    console.log(`${this.name} landed a critical hit on ${enemy.name} with ${this.weapon} and dealt 3 damage!`);
+    const dmg = Math.floor(Math.random() * 6);
+    console.log(`${this.name} attacked ${enemy.name} with ${this.weapons} and dealt ${dmg} damage!`);
     enemy.takeDamage();
-    enemy.hitpoints -= 3;
+    enemy.healthPoints -= dmg;
     if (enemy.healthPoints < 1){
-      enemy.destroy();
+      return;
     }
+    console.log(`${enemy.name} has ${enemy.healthPoints} health points remaining!`);
+    return;
   }
 
   
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
 
-  
+const kingArthur = new Hero({
+  createdAt: new Date(),
+  team: "Heroes",
+  language: "English",
+  kingdom: "Camelot",
+  weapons: "Longsword",
+  healthPoints: 50,
+  name: "King Arthur",
+  dimensons: 0
+});
+
+
+const blackKnight = new Villain({
+  createdAt: new Date(),
+  kingdom: "Underworld",
+  team: "Villains",
+  name: "The Black Knight",
+  language: "English",
+  healthPoints: 50,
+  weapons: "Battleaxe",
+  dimensons: 0
+});
+
+
+while (blackKnight.healthPoints > 0 && kingArthur.healthPoints > 0){
+  kingArthur.attack(blackKnight);
+  blackKnight.attack(kingArthur);
+}
+if(blackKnight.healthPoints < 1){
+  console.log(blackKnight.destroy());
+  blackKnight.destroy();
+}
+else if (kingArthur.healthPoints < 1){
+  console.log(kingArthur.destroy());
+}
